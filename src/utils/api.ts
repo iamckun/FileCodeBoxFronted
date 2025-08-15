@@ -6,8 +6,9 @@ const baseURL =
     ? import.meta.env.VITE_API_BASE_URL_PROD
     : import.meta.env.VITE_API_BASE_URL_DEV
 
-// 确保 baseURL 是一个有效的字符串
+// 确保 baseURL 是一个有效的字符串，并添加 /api/share/ 前缀
 const sanitizedBaseURL = typeof baseURL === 'string' ? baseURL : ''
+const apiPrefix = '/api/share'
 
 // 创建 axios 实例
 const api = axios.create({
@@ -27,9 +28,21 @@ api.interceptors.request.use(
       config.headers['Authorization'] = `Bearer ${token}`
     }
 
-    // 确保 URL 是有效的
+    // 确保 URL 是有效的，并添加 /api/share/ 前缀
     if (config.url && !config.url.startsWith('http')) {
-      config.url = `${sanitizedBaseURL}/${config.url.replace(/^\//, '')}`
+      // 如果 URL 已经包含 /api/share/ 前缀，则不重复添加
+      if (!config.url.startsWith(apiPrefix)) {
+        // 处理相对路径和绝对路径
+        if (config.url.startsWith('/')) {
+          // 绝对路径，如 /share/select/
+          config.url = `${apiPrefix}${config.url}`
+        } else {
+          // 相对路径，如 admin/dashboard
+          config.url = `${apiPrefix}/${config.url}`
+        }
+      }
+      // 添加基础 URL
+      config.url = `${sanitizedBaseURL}${config.url.startsWith('/') ? '' : '/'}${config.url}`
     }
 
     return config

@@ -38,7 +38,7 @@ onMounted(() => {
   } else {
     setColorMode(checkSystemColorScheme())
   }
-  api.post('/', {}).then((res: any) => {
+  api.post('/api/share/file/', {}).then((res: any) => {
     if (res.code === 200) {
       localStorage.setItem('config', JSON.stringify(res.detail))
       if (

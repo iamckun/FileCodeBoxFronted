@@ -378,14 +378,14 @@ const handleSubmit = async () => {
   inputStatus.value.loading = true
 
   try {
-    const response = await api.post('/share/select/', {
+    const response = await api.post('/api/share/file/share/select/', {
       code: code.value
     })
     const res = (response.data || response) as ApiResponse
 
     if (res && res.code === 200) {
       if (res.detail) {
-        const isFile = res.detail.text.startsWith('/share/download') || res.detail.name !== 'Text'
+        const isFile = res.detail.text.startsWith('/api/share/file/share/download') || res.detail.name !== 'Text'
         const newFileData = {
           id: Date.now(),
           code: res.detail.code,

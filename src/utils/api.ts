@@ -8,7 +8,7 @@ const baseURL =
 
 // 确保 baseURL 是一个有效的字符串，并添加 /api/share/ 前缀
 const sanitizedBaseURL = typeof baseURL === 'string' ? baseURL : ''
-const apiPrefix = '/api/share'
+const apiPrefix = '/api/share/file'
 
 // 创建 axios 实例
 const api = axios.create({
@@ -63,7 +63,7 @@ api.interceptors.response.use(
         case 401:
           console.error('未授权，请重新登录')
           localStorage.clear()
-          window.location.href = '/#/login'
+          window.location.href = '/share/file/#/login'
           break
         case 403:
           // 禁止访问
